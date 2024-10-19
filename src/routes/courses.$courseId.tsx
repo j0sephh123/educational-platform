@@ -1,21 +1,35 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { getMockCourse } from "../utils/mockApi";
 
 export const Route = createFileRoute("/courses/$courseId")({
   component: CourseId,
-  async loader(ctx) {
-    console.log("loader", ctx);
-
-    return new Promise<{ a: string }>((resolve) => {
-      setTimeout(() => {
-        resolve({ a: "123" });
-      }, 500);
-    });
-  },
+  loader: ({ params: { courseId } }) => getMockCourse(courseId),
 });
 
 function CourseId() {
+  const { description, lessons } = Route.useLoaderData();
   const { courseId } = Route.useParams();
-  // const { a } = Route.useLoaderData();
 
-  return <div>Hello /courses/{courseId}!</div>;
+  console.log("lessons", lessons);
+
+  return (
+    <>
+      <div className="2">{description}</div>
+      <div className="3">
+        {lessons.length > 0 ? (
+          <Link
+            to="/courses/$courseId/lessons"
+            params={{
+              courseId,
+            }}
+          >
+            <button>Lessons</button>
+          </Link>
+        ) : (
+          <div>No lessons</div>
+        )}
+      </div>
+      <Outlet />
+    </>
+  );
 }

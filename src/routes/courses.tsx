@@ -1,30 +1,34 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { getMockCourses } from "../utils/mockApi";
 
 export const Route = createFileRoute("/courses")({
   component: Courses,
+  loader: getMockCourses,
 });
 
 function Courses() {
+  const courses = Route.useLoaderData();
+
   return (
-    <div>
-      <h3>CoursesList</h3>
-      <Link
-        to="/courses/$courseId"
-        params={{
-          courseId: "1",
-        }}
-      >
-        <li>JS Course</li>
-      </Link>
-      <Link
-        to="/courses/$courseId"
-        params={{
-          courseId: "2",
-        }}
-      >
-        <li>TS Course</li>
-      </Link>
-      <Outlet/>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    }}>
+      <div className='1'>
+        <h3>CoursesList</h3>
+        {courses.map((course) => (
+          <Link
+            to="/courses/$courseId"
+            params={{
+              courseId: course.id,
+            }}
+          >
+            <li>{course.title}</li>
+          </Link>
+        ))}
+      </div>
+      <Outlet />
     </div>
   );
 }

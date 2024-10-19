@@ -15,6 +15,8 @@ import { Route as CoursesImport } from './routes/courses'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as CoursesCourseIdImport } from './routes/courses.$courseId'
+import { Route as CoursesCourseIdLessonsImport } from './routes/courses.$courseId.lessons'
+import { Route as CoursesCourseIdLessonsLessonIdImport } from './routes/courses.$courseId.lessons.$lessonId'
 
 // Create/Update Routes
 
@@ -41,6 +43,19 @@ const CoursesCourseIdRoute = CoursesCourseIdImport.update({
   path: '/$courseId',
   getParentRoute: () => CoursesRoute,
 } as any)
+
+const CoursesCourseIdLessonsRoute = CoursesCourseIdLessonsImport.update({
+  id: '/lessons',
+  path: '/lessons',
+  getParentRoute: () => CoursesCourseIdRoute,
+} as any)
+
+const CoursesCourseIdLessonsLessonIdRoute =
+  CoursesCourseIdLessonsLessonIdImport.update({
+    id: '/$lessonId',
+    path: '/$lessonId',
+    getParentRoute: () => CoursesCourseIdLessonsRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -74,17 +89,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesCourseIdImport
       parentRoute: typeof CoursesImport
     }
+    '/courses/$courseId/lessons': {
+      id: '/courses/$courseId/lessons'
+      path: '/lessons'
+      fullPath: '/courses/$courseId/lessons'
+      preLoaderRoute: typeof CoursesCourseIdLessonsImport
+      parentRoute: typeof CoursesCourseIdImport
+    }
+    '/courses/$courseId/lessons/$lessonId': {
+      id: '/courses/$courseId/lessons/$lessonId'
+      path: '/$lessonId'
+      fullPath: '/courses/$courseId/lessons/$lessonId'
+      preLoaderRoute: typeof CoursesCourseIdLessonsLessonIdImport
+      parentRoute: typeof CoursesCourseIdLessonsImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface CoursesCourseIdLessonsRouteChildren {
+  CoursesCourseIdLessonsLessonIdRoute: typeof CoursesCourseIdLessonsLessonIdRoute
+}
+
+const CoursesCourseIdLessonsRouteChildren: CoursesCourseIdLessonsRouteChildren =
+  {
+    CoursesCourseIdLessonsLessonIdRoute: CoursesCourseIdLessonsLessonIdRoute,
+  }
+
+const CoursesCourseIdLessonsRouteWithChildren =
+  CoursesCourseIdLessonsRoute._addFileChildren(
+    CoursesCourseIdLessonsRouteChildren,
+  )
+
+interface CoursesCourseIdRouteChildren {
+  CoursesCourseIdLessonsRoute: typeof CoursesCourseIdLessonsRouteWithChildren
+}
+
+const CoursesCourseIdRouteChildren: CoursesCourseIdRouteChildren = {
+  CoursesCourseIdLessonsRoute: CoursesCourseIdLessonsRouteWithChildren,
+}
+
+const CoursesCourseIdRouteWithChildren = CoursesCourseIdRoute._addFileChildren(
+  CoursesCourseIdRouteChildren,
+)
+
 interface CoursesRouteChildren {
-  CoursesCourseIdRoute: typeof CoursesCourseIdRoute
+  CoursesCourseIdRoute: typeof CoursesCourseIdRouteWithChildren
 }
 
 const CoursesRouteChildren: CoursesRouteChildren = {
-  CoursesCourseIdRoute: CoursesCourseIdRoute,
+  CoursesCourseIdRoute: CoursesCourseIdRouteWithChildren,
 }
 
 const CoursesRouteWithChildren =
@@ -94,14 +149,18 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/courses/$courseId': typeof CoursesCourseIdRouteWithChildren
+  '/courses/$courseId/lessons': typeof CoursesCourseIdLessonsRouteWithChildren
+  '/courses/$courseId/lessons/$lessonId': typeof CoursesCourseIdLessonsLessonIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/courses/$courseId': typeof CoursesCourseIdRouteWithChildren
+  '/courses/$courseId/lessons': typeof CoursesCourseIdLessonsRouteWithChildren
+  '/courses/$courseId/lessons/$lessonId': typeof CoursesCourseIdLessonsLessonIdRoute
 }
 
 export interface FileRoutesById {
@@ -109,15 +168,36 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/courses': typeof CoursesRouteWithChildren
-  '/courses/$courseId': typeof CoursesCourseIdRoute
+  '/courses/$courseId': typeof CoursesCourseIdRouteWithChildren
+  '/courses/$courseId/lessons': typeof CoursesCourseIdLessonsRouteWithChildren
+  '/courses/$courseId/lessons/$lessonId': typeof CoursesCourseIdLessonsLessonIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/courses' | '/courses/$courseId'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/courses'
+    | '/courses/$courseId'
+    | '/courses/$courseId/lessons'
+    | '/courses/$courseId/lessons/$lessonId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/courses' | '/courses/$courseId'
-  id: '__root__' | '/' | '/about' | '/courses' | '/courses/$courseId'
+  to:
+    | '/'
+    | '/about'
+    | '/courses'
+    | '/courses/$courseId'
+    | '/courses/$courseId/lessons'
+    | '/courses/$courseId/lessons/$lessonId'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/courses'
+    | '/courses/$courseId'
+    | '/courses/$courseId/lessons'
+    | '/courses/$courseId/lessons/$lessonId'
   fileRoutesById: FileRoutesById
 }
 
@@ -164,7 +244,21 @@ export const routeTree = rootRoute
     },
     "/courses/$courseId": {
       "filePath": "courses.$courseId.tsx",
-      "parent": "/courses"
+      "parent": "/courses",
+      "children": [
+        "/courses/$courseId/lessons"
+      ]
+    },
+    "/courses/$courseId/lessons": {
+      "filePath": "courses.$courseId.lessons.tsx",
+      "parent": "/courses/$courseId",
+      "children": [
+        "/courses/$courseId/lessons/$lessonId"
+      ]
+    },
+    "/courses/$courseId/lessons/$lessonId": {
+      "filePath": "courses.$courseId.lessons.$lessonId.tsx",
+      "parent": "/courses/$courseId/lessons"
     }
   }
 }

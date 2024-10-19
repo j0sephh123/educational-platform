@@ -4,7 +4,7 @@ const mockCourses: CoursesList = [
   {
     id: "1",
     title: "JS Course",
-    description: "",
+    description: "a course about js",
     lessons: [
       {
         id: "1",
@@ -31,7 +31,7 @@ const mockCourses: CoursesList = [
   {
     id: "2",
     title: "TS Course",
-    description: "",
+    description: "a basic course about ts",
     lessons: [],
   },
 ];
