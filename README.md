@@ -6,6 +6,10 @@ Learn && Have Fun
 
 Everything else is TBD..
 
+## Tech stack
+
+- **zod** should be used extensively
+
 ## Requirements
 
 ### **Goal**: Create a modular educational platform with only the client-side for now. The core features should be simple, intuitive, and buildable in small increments, so you can make steady progress without feeling overwhelmed.
@@ -27,9 +31,6 @@ Everything else is TBD..
     - **Unique ID** for routing purposes (e.g., `course-1`).
   - Each course item will be clickable, and clicking on it will take the user to the details page for that course.
 
-- **Why It's Simple**:
-  - This is a static list (you can hardcode it initially), and all you need to do is loop through the list and display it. No complex logic is involved.
-
 #### 2. **View Course Details**
 
 - **Description**:
@@ -42,9 +43,6 @@ Everything else is TBD..
     - A list of lessons for that course (just the titles for now).
   - Each lesson should be a link that, when clicked, takes the user to the lesson's content page.
 
-- **Why It's Simple**:
-  - You’re just passing data from the list of courses to a new page (course details). You can again hardcode the data, so there’s no need for back-end calls or state management complexity.
-
 #### 3. **Display a List of Lessons per Course**
 
 - **Description**:
@@ -54,9 +52,6 @@ Everything else is TBD..
   - In the course details page, include:
     - A list of lesson titles (you can hardcode a few lessons for each course).
   - Each lesson should be clickable, and clicking on a lesson title should navigate the user to the lesson content page.
-
-- **Why It's Simple**:
-  - The structure here is very basic—courses contain lessons, and you are just listing them. This is mostly navigation and passing of static data.
 
 #### 4. **View Lesson Content**
 
@@ -68,9 +63,6 @@ Everything else is TBD..
     - **Lesson Title**.
     - **Lesson Content** (this can be a block of text, such as an explanation of the topic).
   - Each lesson belongs to a course, so the navigation will include course > lesson.
-
-- **Why It's Simple**:
-  - This is a static content page that just displays the lesson details—essentially text. No fancy media or interactions are required for this MVP.
 
 #### 5. **Basic Routing and Navigation**
 
@@ -84,9 +76,6 @@ Everything else is TBD..
     - **Lesson Page**: Displays the content of a specific lesson.
   - Ensure users can navigate back to the previous pages, such as going back to the course list from course details, or from a lesson back to the course details.
 
-- **Why It's Simple**:
-  - Most of the navigation can be handled with a few basic routes and links. No complex nested routing or dynamic URL generation required for now.
-
 #### 6. **User Interface Requirements**
 
 - **Description**:
@@ -98,9 +87,6 @@ Everything else is TBD..
     - **Body**: A space for the main content (course lists, details, lessons).
     - **Simple List Display**: For courses and lessons, use simple lists (unordered lists or cards).
     - **Links**: Use links/buttons to allow navigation between courses and lessons.
-
-- **Why It's Simple**:
-  - No complex styling or component libraries needed—just basic HTML and CSS (or a light framework like Bootstrap or Material UI if you want). Focus on functionality rather than design.
 
 ---
 
